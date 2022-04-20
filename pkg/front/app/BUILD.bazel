@@ -2,12 +2,14 @@ load("//:defs.bzl", "js_library", "ts_project")
 load("@npm//@aspect-build/webpack:index.bzl", "webpack_dev_server", "webpack_bundle")
 load("@npm//@bazel/esbuild:index.bzl", "esbuild", "esbuild_config")
 load("@npm//http-server:index.bzl", "http_server")
+load("@npm//@aspect-build/webpack:index.bzl", "webpack_bundle", "webpack_dev_server")
 
 ts_project(
     name = "app",
     srcs = [
         "main.tsx",
         "src/app.tsx",
+        "src/paragraph.tsx",
     ],
     deps = [
         "@npm//:node_modules"
@@ -42,4 +44,14 @@ http_server(
         ":bundle",
     ],
     templated_args = ["."],
+)
+
+webpack_dev_server(
+    name = "dev_server",
+    data = [
+        "index.html",
+        ":app",
+        "@npm//:node_modules",
+    ],
+    webpack_config = ":webpack.dev-server.config.js",
 )
