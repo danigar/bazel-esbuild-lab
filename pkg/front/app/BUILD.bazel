@@ -1,0 +1,45 @@
+load("//:defs.bzl", "js_library", "ts_project")
+load("@npm//@aspect-build/webpack:index.bzl", "webpack_dev_server", "webpack_bundle")
+load("@npm//@bazel/esbuild:index.bzl", "esbuild", "esbuild_config")
+load("@npm//http-server:index.bzl", "http_server")
+
+ts_project(
+    name = "app",
+    srcs = [
+        "main.tsx",
+        "src/app.tsx",
+    ],
+    deps = [
+        "@npm//:node_modules"
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# // TODO: Remove config
+# esbuild_config(
+#     name = "esbuild_config",
+#     config_file = ":esbuild.config.mjs",
+#     deps = [
+#         "@npm//@types/node",
+#         "@npm//esbuild-plugin-alias",
+#         "@npm//esbuild-plugin-svgr",
+#     ],
+# )
+
+esbuild(
+    name = "bundle",
+    # // TODO: Remove config
+    # config = ":esbuild_config",
+    entry_point = "main.jsx",
+    splitting = False,
+    deps = [":app"],
+)
+
+http_server(
+    name = "server",
+    data = [
+        "index.html",
+        ":bundle",
+    ],
+    templated_args = ["."],
+)
