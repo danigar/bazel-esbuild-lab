@@ -1,4 +1,4 @@
-## ESBUILD test lab repo
+## ESBUILD test lab repo
 
 This repository has been created to setup building a simple webapp using esbuild.
 The build fails because bad dependencies resolution importing `@mui/material`.
